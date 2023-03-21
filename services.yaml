@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service1
+  template:
+    metadata:
+      labels:
+        app: service1
+    spec:
+      containers:
+      - name: service1-container
+        image: georgesguitton2/myservice:1.0
+        imagePullPolicy: Always
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service2-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service2
+  template:
+    metadata:
+      labels:
+        app: service2
+    spec:
+      containers:
+        - name: service2-container
+          image: georgesguitton2/myservice2:1.0
+          imagePullPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service1-service
+spec:
+  ports:
+    - name: http
+      targetPort: 8080
+      port: 80
+  type: ClusterIP
+  selector:
+    app: service1
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service2-service
+spec:
+  ports:
+    - name: http
+      targetPort: 8080
+      port: 80
+  type: ClusterIP
+  selector:
+    app: service2
+---
